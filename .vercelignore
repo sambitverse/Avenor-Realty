@@ -1,0 +1,9 @@
+node_modules
+.git
+.env
+.env.local
+tmp
+*.log
+scratch
+.gemini
+stitch_avenor_editorial_real_estate

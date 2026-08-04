@@ -1,0 +1,9 @@
+.vercel
+node_modules
+dist
+stitch_avenor_editorial_real_estate
+scripts
+public/splits/
+src/components/hero/Hero.jsx
+.env
+.env.*

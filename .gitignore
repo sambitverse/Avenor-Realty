@@ -7,3 +7,6 @@ public/splits/
 src/components/hero/Hero.jsx
 .env
 .env.*
+api/
+src/services/api.js
+client/src/services/api.js

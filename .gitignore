@@ -9,4 +9,4 @@ src/components/hero/Hero.jsx
 .env.*
 api/
 src/services/api.js
-client/src/services/api.js
+client/

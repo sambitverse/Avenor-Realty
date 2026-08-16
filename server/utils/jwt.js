@@ -1,20 +1,60 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'avenor_jwt_secret_key_2026_production_secure_token';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'avenor_refresh_secret_key_2026_super_secure';
+dotenv.config();
 
+/**
+ * Validates and retrieves the JWT secret from environment variables.
+ * Fails safely with an explicit error if missing.
+ */
+export const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is required');
+  }
+  return secret;
+};
+
+export const getJwtRefreshSecret = () => {
+  return process.env.JWT_REFRESH_SECRET || getJwtSecret();
+};
+
+/**
+ * Generates an Access Token with standard payload.
+ */
 export const generateAccessToken = (payload) => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+  const secret = getJwtSecret();
+  const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
+  return jwt.sign(payload, secret, { expiresIn });
 };
 
+/**
+ * Generates a Refresh Token.
+ */
 export const generateRefreshToken = (payload) => {
-  return jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '30d' });
+  const secret = getJwtRefreshSecret();
+  const expiresIn = process.env.JWT_REFRESH_EXPIRES_IN || '30d';
+  return jwt.sign(payload, secret, { expiresIn });
 };
 
+/**
+ * Verifies an Access Token. Throws error if invalid or expired.
+ */
 export const verifyAccessToken = (token) => {
-  return jwt.verify(token, JWT_SECRET);
+  if (!token) {
+    throw new Error('Token is required for verification');
+  }
+  const secret = getJwtSecret();
+  return jwt.verify(token, secret);
 };
 
+/**
+ * Verifies a Refresh Token.
+ */
 export const verifyRefreshToken = (token) => {
-  return jwt.verify(token, JWT_REFRESH_SECRET);
+  if (!token) {
+    throw new Error('Refresh token is required for verification');
+  }
+  const secret = getJwtRefreshSecret();
+  return jwt.verify(token, secret);
 };
